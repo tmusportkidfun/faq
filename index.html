@@ -7,8 +7,12 @@
 <style>
   /* --- 基礎設定 --- */
   :root {
-    --bg-color: #EEF4ED;
-    /* 酒紅色維持您上次覺得不錯的設定 */
+    /* 1. 修改：背景改回溫暖的米白色，解決單調感 */
+    --bg-color: #FDFCF8; 
+    
+    /* Header 專用的淺綠色 (配合圖片) */
+    --header-bg: #EEF4ED;
+
     --primary-color: #9E2A44; 
     --primary-light: #c45d73; 
     --text-color: #333;
@@ -27,15 +31,22 @@
     color: var(--text-color);
   }
 
-  /* --- Header 設定 (維持不變) --- */
+  /* --- 2. 修改：Header 造型優化 --- */
   header {
-    background-color: var(--bg-color);
+    background-color: var(--header-bg); /* Header 維持淺綠 */
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 0 20px 0; 
-    margin-bottom: 10px;
+    padding: 0 0 30px 0; 
+    margin-bottom: 40px; /* 增加與下方內容的距離 */
+    
+    /* --- 關鍵修改：圓弧底部 + 陰影 --- */
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 10px 25px rgba(166, 187, 169, 0.3); /* 帶一點綠色調的陰影，更自然 */
+    position: relative; /* 確保陰影在最上層 */
+    z-index: 10;
   }
 
   .header-content {
@@ -51,6 +62,7 @@
     height: auto;
     display: block;
     object-fit: cover; 
+    /* 確保圖片也跟著圓角裁切 (雖然圖片在上面，但以防萬一) */
   }
 
   /* --- 示範區塊 (維持不變) --- */
@@ -73,7 +85,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 2px 5px rgba(158, 42, 68, 0.2);
+    box-shadow: 0 4px 10px rgba(196, 93, 115, 0.3); /* 按鈕陰影也加強一點 */
     animation: bounce 2s infinite;
   }
 
@@ -92,46 +104,37 @@
     box-sizing: border-box;
   }
 
-  /* --- 【修改重點 1】跑者圖片設定 --- */
+  /* --- 火箭設定 (維持您剛選的 Emoji 火箭) --- */
   #runner {
     position: absolute;
     top: 0;
     left: -80px;
-    /* 1. 縮小尺寸 */
     width: 50px; 
     height: 50px;
+    font-size: 40px; 
     z-index: 999;
     pointer-events: none;
-    /* 2. 預設隱藏 */
     opacity: 0; 
-    /* 增加 opacity 的過渡動畫 */
     transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s ease, opacity 0.2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: rotate(45deg); /* 火箭朝右飛 */
   }
 
-  #runner img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    /* 為了讓綠色在紅色上更明顯，加一點白色光暈和陰影，增加層次感 */
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)) drop-shadow(0 0 2px rgba(255,255,255,0.5));
-  }
-
-  /* --- 【修改重點 2】跑道間距調整 --- */
+  /* --- 跑道樣式 --- */
   .main-track {
-    /* 加大下方間距，騰出空間給跑者停駐，避免擋到下一個跑道 */
     margin-bottom: 50px; 
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    /* 因為背景變米白，這裡陰影可以稍微淡一點，更清爽 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     background-color: var(--light-bg-accent);
-    overflow: visible; /* 修改為 visible，以防跑者稍微超出邊界 */
+    overflow: visible; 
     border: none; 
-    position: relative; /* 增加定位基準 */
+    position: relative; 
   }
 
-  /* 跑道按鈕 (維持不變) */
+  /* 跑道按鈕 */
   .track-btn {
     position: relative;
     background-color: var(--primary-color);
@@ -150,7 +153,6 @@
     );
     border-bottom: 4px solid rgba(0,0,0,0.1);
     transition: transform 0.1s, filter 0.2s;
-    /* 確保圓角 */
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
@@ -177,13 +179,12 @@
     text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
   }
 
-  /* --- 第二層：細項選單區 (維持不變) --- */
+  /* --- 細項選單區 --- */
   .sub-menu-panel {
     background-color: var(--light-bg-accent);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-out;
-    /* 確保下方圓角 */
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
   }
@@ -280,7 +281,7 @@
     <img src="images/header_bg.png" alt="臺北醫學大學體育事務處" class="header-banner">
     <div class="subtitle-container">
       <div class="subtitle">
-        <span>⚡點選跑道，光速為您解答！</span>
+        <span>🔥 點選跑道，光速為您解答！</span>
       </div>
     </div>
   </div>
@@ -289,7 +290,7 @@
 <div class="stadium-container" id="stadium">
 
   <div id="runner">
-    <img src="images/runner.png" alt="Running Man">
+    🚀
   </div>
 
   <div class="main-track">
@@ -441,7 +442,7 @@
 </div>
 
 <script>
-  // 1. 跑者定位與分類展開 (【修改重點 3】JS 動畫邏輯調整)
+  // 1. 跑者定位與分類展開
   function runAndOpenCategory(btn, categoryId) {
     const runner = document.getElementById('runner');
     const container = document.getElementById('stadium');
@@ -455,41 +456,35 @@
     const centerOffset = (btnRect.height / 2) - (runner.offsetHeight / 2);
     const finalTop = relativeTop + centerOffset;
 
-    // 重置動畫與位置：先瞬間移到起點，並保持隱藏
+    // 重置動畫
     runner.style.transition = 'none';
     runner.style.top = finalTop + 'px';
     runner.style.left = '10px';
-    // 確保一開始是透明的，這樣等下 opacity: 1 才有淡入效果
     runner.style.opacity = '0'; 
 
-    // 強制瀏覽器重繪 (Reflow)
     void runner.offsetWidth; 
 
-    // 開始跑步動畫：
-    // 1. left: 跑到右側 88% 的位置 (停在右邊方框上方)
-    // 2. opacity: 快速淡入 (0.2s) 並保持不透明 (opacity: 1)
+    // 開始跑步動畫
     runner.style.transition = 'left 0.8s ease-in-out, opacity 0.2s ease-out';
     runner.style.left = '88%'; 
     runner.style.opacity = '1'; 
 
-    // 收合其他選單
+    // 收合其他
     document.querySelectorAll('.sub-menu-panel').forEach(panel => {
       if(panel.id !== categoryId) panel.style.maxHeight = null;
     });
 
-    // 展開目標選單
+    // 展開目標
     setTimeout(() => {
       if (targetPanel.style.maxHeight) {
         targetPanel.style.maxHeight = null;
-        // 如果是收合動作，也可以選擇讓跑者消失 (看需求，目前設定是保留在原地)
-        // runner.style.opacity = '0'; 
       } else {
         targetPanel.style.maxHeight = targetPanel.scrollHeight + "px";
       }
     }, 400);
   }
 
-  // 2. 細項展開 (保持不變)
+  // 2. 細項展開
   function toggleAnswer(questionBtn) {
     const answerDiv = questionBtn.nextElementSibling;
     questionBtn.classList.toggle('active');
@@ -506,7 +501,7 @@
     }
   }
 
-  // 3. 網址參數功能 (保持不變)
+  // 3. 網址參數
   window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const categoryKey = urlParams.get('cat'); 
