@@ -7,15 +7,12 @@
 <style>
   /* --- 基礎設定 --- */
   :root {
-    /* 1. 修改：統一背景色為 #EEF4ED */
     --bg-color: #EEF4ED;
-    
-    /* 4. 修改：調整酒紅色，改亮一點，不要那麼黑 */
+    /* 酒紅色維持您上次覺得不錯的設定 */
     --primary-color: #9E2A44; 
-    --primary-light: #c45d73; /* 淺酒紅，給示範區塊用 */
-    
+    --primary-light: #c45d73; 
     --text-color: #333;
-    --light-bg-accent: #ffffff; /* 內容區塊保持白色，與底色區隔 */
+    --light-bg-accent: #ffffff;
   }
 
   body {
@@ -30,19 +27,17 @@
     color: var(--text-color);
   }
 
-  /* --- 2. 修改：Header 滿版設定 --- */
+  /* --- Header 設定 (維持不變) --- */
   header {
     background-color: var(--bg-color);
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* 移除 padding，讓圖片可以貼邊 */
     padding: 0 0 20px 0; 
     margin-bottom: 10px;
   }
 
-  /* 移除原本的寬度限制，改為 100% */
   .header-content {
     width: 100%; 
     text-align: center;
@@ -51,20 +46,16 @@
     align-items: center;
   }
 
-  /* 圖片滿版設定 */
   .header-banner {
     width: 100%;
     height: auto;
     display: block;
-    object-fit: cover; /* 確保圖片填滿 */
-    
-    /* 因為底色已經一樣了，移除混合模式讓顏色更鮮豔 */
-    /* mix-blend-mode: multiply; */ 
+    object-fit: cover; 
   }
 
-  /* --- 3. 修改：示範區塊 (光速解答) --- */
+  /* --- 示範區塊 (維持不變) --- */
   .subtitle-container {
-    margin-top: -5px; /* 稍微往上拉，接續圖片 */
+    margin-top: -5px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -73,13 +64,12 @@
   }
 
   .subtitle {
-    /* 改成淺酒紅色，作為下方跑道的「示範」 */
     background-color: var(--primary-light); 
     color: white;
     font-size: 1rem;
     font-weight: bold;
     padding: 8px 25px;
-    border-radius: 50px; /* 圓潤造型 */
+    border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -102,16 +92,20 @@
     box-sizing: border-box;
   }
 
-  /* --- 跑者圖片化設定 --- */
+  /* --- 【修改重點 1】跑者圖片設定 --- */
   #runner {
     position: absolute;
     top: 0;
     left: -80px;
-    width: 70px;
-    height: 70px;
+    /* 1. 縮小尺寸 */
+    width: 50px; 
+    height: 50px;
     z-index: 999;
     pointer-events: none;
-    transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s ease;
+    /* 2. 預設隱藏 */
+    opacity: 0; 
+    /* 增加 opacity 的過渡動畫 */
+    transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s ease, opacity 0.2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,49 +115,53 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    /* 為了讓綠色在紅色上更明顯，加一點白色光暈和陰影，增加層次感 */
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)) drop-shadow(0 0 2px rgba(255,255,255,0.5));
   }
 
-  /* --- 第一層：主要跑道區塊 --- */
+  /* --- 【修改重點 2】跑道間距調整 --- */
   .main-track {
-    margin-bottom: 20px;
-    border-radius: 15px; /* 更圓潤一點 */
+    /* 加大下方間距，騰出空間給跑者停駐，避免擋到下一個跑道 */
+    margin-bottom: 50px; 
+    border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     background-color: var(--light-bg-accent);
-    overflow: hidden;
-    /* 移除邊框，用陰影呈現立體感即可 */
+    overflow: visible; /* 修改為 visible，以防跑者稍微超出邊界 */
     border: none; 
+    position: relative; /* 增加定位基準 */
   }
 
-  /* 4. 修改：跑道按鈕優化 */
+  /* 跑道按鈕 (維持不變) */
   .track-btn {
     position: relative;
-    background-color: var(--primary-color); /* 使用調亮後的酒紅 */
+    background-color: var(--primary-color);
     color: white;
-    padding: 30px 20px 30px 70px; /* 加高一點，更有跑道感 */
+    padding: 30px 20px 30px 70px;
     cursor: pointer;
     font-size: 1.35rem;
     font-weight: bold;
     user-select: none;
     letter-spacing: 1px;
-    
-    /* --- 關鍵修改：讓跑道線更明顯 --- */
     background-image: repeating-linear-gradient(
       90deg,
       transparent,
-      transparent 58px,     /* 間距拉寬 */
-      rgba(255,255,255,0.25) 60px /* 線條變亮、變明顯 */
+      transparent 58px,
+      rgba(255,255,255,0.25) 60px
     );
-    border-bottom: 4px solid rgba(0,0,0,0.1); /* 增加底部厚度感 */
+    border-bottom: 4px solid rgba(0,0,0,0.1);
     transition: transform 0.1s, filter 0.2s;
+    /* 確保圓角 */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
   }
   
   .track-btn:hover {
-    filter: brightness(1.1); /* 滑鼠移過去變亮 */
+    filter: brightness(1.1);
   }
 
   .track-btn:active {
     transform: scale(0.98);
-    border-bottom: 2px solid rgba(0,0,0,0.1); /* 按下去時壓扁效果 */
+    border-bottom: 2px solid rgba(0,0,0,0.1);
   }
 
   .lane-num {
@@ -171,20 +169,23 @@
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 2.5rem; /* 數字變大 */
-    opacity: 0.8;      /* 數字變清楚 */
+    font-size: 2.5rem;
+    opacity: 0.8;
     font-style: italic;
     font-family: 'Arial Black', sans-serif;
     pointer-events: none;
     text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
   }
 
-  /* --- 第二層：細項選單區 --- */
+  /* --- 第二層：細項選單區 (維持不變) --- */
   .sub-menu-panel {
     background-color: var(--light-bg-accent);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-out;
+    /* 確保下方圓角 */
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
   }
 
   .sub-question {
@@ -228,7 +229,7 @@
     color: #555;
     padding: 0 25px;
     transition: max-height 0.3s ease;
-    border-left: 5px solid #d4a5b0; /* 淺粉色裝飾線 */
+    border-left: 5px solid #d4a5b0;
   }
 
   .sub-answer p {
@@ -241,7 +242,7 @@
   }
 
   .sub-answer a {
-    color: #0077cc; /* 超連結改亮藍色 */
+    color: #0077cc;
     font-weight: bold;
     text-decoration: none;
     word-break: break-all;
@@ -263,7 +264,7 @@
   .gentle-tip {
     font-size: 0.95rem;
     color: #666;
-    background-color: #f2f7f9; /* 稍微偏藍的灰色，比較清爽 */
+    background-color: #f2f7f9;
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
@@ -277,7 +278,6 @@
 <header>
   <div class="header-content">
     <img src="images/header_bg.png" alt="臺北醫學大學體育事務處" class="header-banner">
-    
     <div class="subtitle-container">
       <div class="subtitle">
         <span>🔥 點選跑道，光速為您解答！</span>
@@ -297,9 +297,7 @@
       <span class="lane-num">1</span>
       體育館場館問題
     </div>
-
     <div id="category-venue" class="sub-menu-panel">
-        
       <div class="sub-question" onclick="toggleAnswer(this)">健身房開放時間?</div>
       <div class="sub-answer">
         <p><strong>🏫信義校區健身中心</strong><br>
@@ -309,16 +307,13 @@
         <strong>【寒、暑假】</strong><br>
         週一至週五 18:15 – 21:00<br>
         週末 09:15-12:00、14:15-17:00</p>
-        
         <hr style="border: 1px dashed #ddd;">
-
         <p><strong>🏫雙和校區健身中心</strong><br>
         <strong>【學期間】</strong><br>
         週一至週五 11:00 – 15:00、16:00 – 20:00<br><br>
         <strong>【寒、暑假】</strong><br>
         週一至週五 11:00 – 15:00、16:00 – 19:00<br>
         (暑期週三休館)</p>
-        
         <div class="gentle-tip">
           💡 <strong>貼心小提醒：</strong><br>
           如遇國定假日或特殊活動，開放時間可能會配合彈性調整。<br>
@@ -327,7 +322,6 @@
           <a href="https://reurl.cc/1kKdjD" target="_blank">https://reurl.cc/1kKdjD</a>
         </div>
       </div>
-
       <div class="sub-question" onclick="toggleAnswer(this)">健身房收費標準?</div>
       <div class="sub-answer">
         <p>
@@ -341,7 +335,6 @@
           ● 校外人士：70 元 / 次
         </p>
       </div>
-
       <div class="sub-question" onclick="toggleAnswer(this)">泳池開放時間?</div>
       <div class="sub-answer">
         <p>
@@ -354,7 +347,6 @@
           06:00 – 11:00<br>
           14:00 – 18:00
         </p>
-        
         <div class="gentle-tip">
           💡 <strong>貼心小提醒：</strong><br>
           如遇國定假日或特殊活動，開放時間可能會配合彈性調整。<br>
@@ -363,7 +355,6 @@
           <a href="https://reurl.cc/NNYk1Q" target="_blank">https://reurl.cc/NNYk1Q</a>
         </div>
       </div>
-
       <div class="sub-question" onclick="toggleAnswer(this)">泳池收費標準?</div>
       <div class="sub-answer">
         <p>收費標準敬請參考如下：</p>
@@ -379,81 +370,65 @@
     </div>
   </div>
 
-
   <div class="main-track">
     <div class="track-btn" onclick="runAndOpenCategory(this, 'category-course')">
       <span class="lane-num">2</span>
       課程與報名 (成人/兒童陸上課程)
     </div>
-
     <div id="category-course" class="sub-menu-panel">
       <div class="sub-question" onclick="toggleAnswer(this)">泳池相關課程問題?</div>
       <div class="sub-answer">
         <p>目前泳池課程正在整合中， 暫無詳細報名資訊，造成不便敬請見諒。<br>
         泳池詳細課程資訊請直接致電：(02) 27399118#分機2272，將有專人為您說明。</p>
       </div>
-
      <div class="sub-question" onclick="toggleAnswer(this)">TMU SPORT成人健康促進課程如何報名?</div>
       <div class="sub-answer">
         <p><strong>📅 課程週期</strong><br>
         本課程以 <strong>每 2 個月</strong> 為一期。</p>
-
         <p><strong>📢 開課訊息不漏接</strong><br>
         最新報名時間，皆會優先於 <strong>官方 LINE</strong> 及 <strong>FB 粉專</strong> 公告，建議您提前追蹤。</p>
-
         <p><strong>📝 報名方式</strong><br>
         待報名開放後，請直接至「課程報名系統」進行線上報名。</p>
-
         <div class="gentle-tip" style="background-color: #e8f4fd; border-left-color: #3498db;">
           🔗 <strong>線上報名傳送門：</strong><br>
           <a href="https://reurl.cc/2lK2Vr" target="_blank">https://reurl.cc/2lK2Vr</a>
         </div>
       </div>
-
      <div class="sub-question" onclick="toggleAnswer(this)">TMU KID x FUN兒童營隊如何報名?</div>
       <div class="sub-answer">
         <p><strong>🌟 TMU KID x FUN</strong><br>
         陪您的孩子充實寒暑假！我們致力於打造寓教於樂的營隊體驗。</p>
-
         <p><strong>📅 資訊公布時間</strong><br>
         夏令營與冬令營資訊，通常於活動前 <strong>2~3 個月</strong> 優先公布於 <strong>LINE 官方</strong> 及 <strong>FB 粉專</strong>，名額有限，建議提早關注！</p>
-
         <div class="gentle-tip" style="background-color: #fffbf0; border-left-color: #f39c12;">
           🔗 <strong>營隊報名傳送門：</strong><br>
           <a href="https://reurl.cc/nlm9b6" target="_blank">https://reurl.cc/nlm9b6</a>
         </div>
       </div>
-        
       <div class="sub-question" onclick="toggleAnswer(this)">我可以包班嗎?</div>
       <div class="sub-answer">
         <p><strong>🤝 專屬包班動起來</strong><br>
         目前開放 <strong>TMU SPORT 成人健康促進課程</strong> 包班申請。</p>
-
         <p><strong>👥 歡迎對象</strong><br>
         北醫體系教職員或醫院員工、公司企業團體、社區里民揪團。</p>
-
         <div class="gentle-tip">
           <strong>📞 詳情洽詢：</strong><br>
           相關細節歡迎直接洽詢 LINE 官方帳號，或直接致電：<br>
           <strong style="font-size: 1.1rem; color: #2c3e50;">(02) 2739-9118 分機 2274</strong>
         </div>
       </div>
-
       <div class="sub-question" onclick="toggleAnswer(this)">哪裡可以獲得課程資訊?</div>
       <div class="sub-answer">
         <p><strong>📱 鎖定最新消息</strong><br>
         歡迎追蹤以下平台，隨時掌握開課與活動第一手資訊！</p>
-
         <p>
           <strong>✅ LINE 官方帳號</strong><br>
           請搜尋 ID：<span style="color: #00B900; font-weight: bold; font-family: monospace; font-size: 1.1rem;">@496xevbr</span>
         </p>
-
         <p>
           <strong>✅ FB 粉絲專頁</strong><br>
           🚀 新活動專屬粉專即將上架，敬請期待！
         </p>
-
         <div class="gentle-tip">
           <strong>❓ 如有任何疑問</strong><br>
           歡迎直接私訊 LINE 官方帳號，或致電：<br>
@@ -466,7 +441,7 @@
 </div>
 
 <script>
-  // 1. 跑者定位與分類展開 (保持不變)
+  // 1. 跑者定位與分類展開 (【修改重點 3】JS 動畫邏輯調整)
   function runAndOpenCategory(btn, categoryId) {
     const runner = document.getElementById('runner');
     const container = document.getElementById('stadium');
@@ -476,27 +451,38 @@
     const btnRect = btn.getBoundingClientRect();
     const relativeTop = btnRect.top - containerRect.top;
     
+    // 計算垂直置中
     const centerOffset = (btnRect.height / 2) - (runner.offsetHeight / 2);
     const finalTop = relativeTop + centerOffset;
 
+    // 重置動畫與位置：先瞬間移到起點，並保持隱藏
     runner.style.transition = 'none';
     runner.style.top = finalTop + 'px';
     runner.style.left = '10px';
-    runner.style.opacity = '1';
+    // 確保一開始是透明的，這樣等下 opacity: 1 才有淡入效果
+    runner.style.opacity = '0'; 
 
+    // 強制瀏覽器重繪 (Reflow)
     void runner.offsetWidth; 
 
-    runner.style.transition = 'left 0.8s ease-in-out, opacity 0.5s ease 0.6s';
-    runner.style.left = '85%';
-    runner.style.opacity = '0.3';
+    // 開始跑步動畫：
+    // 1. left: 跑到右側 88% 的位置 (停在右邊方框上方)
+    // 2. opacity: 快速淡入 (0.2s) 並保持不透明 (opacity: 1)
+    runner.style.transition = 'left 0.8s ease-in-out, opacity 0.2s ease-out';
+    runner.style.left = '88%'; 
+    runner.style.opacity = '1'; 
 
+    // 收合其他選單
     document.querySelectorAll('.sub-menu-panel').forEach(panel => {
       if(panel.id !== categoryId) panel.style.maxHeight = null;
     });
 
+    // 展開目標選單
     setTimeout(() => {
       if (targetPanel.style.maxHeight) {
         targetPanel.style.maxHeight = null;
+        // 如果是收合動作，也可以選擇讓跑者消失 (看需求，目前設定是保留在原地)
+        // runner.style.opacity = '0'; 
       } else {
         targetPanel.style.maxHeight = targetPanel.scrollHeight + "px";
       }
