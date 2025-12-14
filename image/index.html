@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>臺北醫學大學體育事務處 - 快速問答導覽頁</title>
+<style>
+  /* --- 基礎設定 --- */
+  :root {
+    --primary-color: #800020;  /* 單位代表色：酒紅 */
+    --header-bg: #EEF4ED;      /* Logo 氛圍色：薄荷綠 */
+    --light-primary: #e6ccd2; 
+    --bg-color: #ffffff;       /* 改為純白，讓紅綠對比更乾淨 */
+    --text-color: #333;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    font-family: system-ui, -apple-system, "Microsoft JhengHei", "Heiti TC", sans-serif;
+    margin: 0;
+    padding: 0; /* 移除 Body padding，讓 Header 可以滿版 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+  }
+
+  /* --- 1. Header 全寬背景設定 --- */
+  header {
+    background-color: var(--header-bg); /* 設定您的薄荷綠 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 40px 20px; /* 增加內部留白 */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    
+    /* 底部加一點弧度或裝飾，讓紅綠交接更柔和 (選用) */
+    border-bottom: 1px solid #dcece5;
+    box-shadow: 0 4px 10px rgba(105, 155, 126, 0.1); 
+  }
+
+  /* Header 圖片容器限制 */
+  .header-content {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+  }
+
+  /* Header 圖片樣式 */
+  .header-banner {
+    width: 100%;
+    height: auto;
+    display: block;
+    
+    /* --- 關鍵魔法：讓圖片融入背景 --- */
+    /* 這行會讓圖片中的白色變透明，透出背後的薄荷綠，解決白底圖片這突兀的問題 */
+    mix-blend-mode: multiply; 
+    
+    /* 如果您的圖片本身就是透明背景PNG，可以移除上面那行，改用下面這行增加質感 */
+    /* filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); */
+  }
+
+  /* --- 副標題 --- */
+  .subtitle {
+    margin-top: 15px;
+    /* 改用深青色，連結綠色 Header 與下方內容，比純灰更協調 */
+    color: #2F4F4F; 
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: inline-block;
+    animation: bounce 2s infinite;
+    
+    background-color: rgba(255,255,255,0.6); /* 淡淡的白底增加文字可讀性 */
+    padding: 5px 15px;
+    border-radius: 20px;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-5px);}
+    60% {transform: translateY(-3px);}
+  }
+
+  /* --- 賽道容器 --- */
+  .stadium-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px 120px 20px; /* 左右補回 padding */
+    box-sizing: border-box;
+  }
+
+  /* --- 2. 跑者圖片化設定 --- */
+  #runner {
+    position: absolute;
+    top: 0;
+    left: -80px;
+    width: 70px;
+    height: 70px;
+    z-index: 999;
+    pointer-events: none;
+    transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #runner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* --- 第一層：主要跑道區塊 --- */
+  .main-track {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background-color: white;
+    overflow: hidden;
+    border: 1px solid #eee; /* 增加微微邊框 */
+  }
+
+  /* 跑道按鈕 - 維持酒紅色 */
+  .track-btn {
+    position: relative;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 25px 20px 25px 60px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: bold;
+    user-select: none;
+    /* 微調漸層，增加一點質感 */
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(255,255,255,0.1) 20px
+    );
+    transition: transform 0.1s;
+  }
+  
+  .track-btn:active {
+    transform: scale(0.98);
+  }
+
+  .lane-num {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    opacity: 0.4;
+    font-style: italic;
+    font-family: 'Arial Black', sans-serif;
+    pointer-events: none;
+  }
+
+  /* --- 第二層：細項選單區 --- */
+  .sub-menu-panel {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+
+  .sub-question {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    color: #444;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+  }
+
+  .sub-question:hover {
+    background-color: #f9f9f9;
+    color: var(--primary-color);
+  }
+
+  .sub-question::after {
+    content: '+';
+    font-size: 1.2rem;
+    color: #999;
+  }
+
+  .sub-question.active {
+    background-color: #fff5f6; /* 淡粉色背景呼應酒紅 */
+    color: var(--primary-color);
+  }
+  .sub-question.active::after {
+    content: '-';
+  }
+
+  .sub-answer {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #fafafa;
+    color: #555;
+    padding: 0 20px;
+    transition: max-height 0.3s ease;
+    border-left: 4px solid var(--light-primary);
+  }
+
+  .sub-answer p {
+    margin: 15px 0;
+    line-height: 1.6;
+  }
+    
+  .sub-answer strong {
+    color: #a84e57;
+  }
+
+  .sub-answer a {
+    color: #2980b9;
+    font-weight: bold;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .sub-answer a:hover {
+    text-decoration: underline;
+  }
+    
+  .notice-text {
+    color: #d63031;
+    font-weight: bold;
+    background-color: #fff0f0;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+    
+  .gentle-tip {
+    font-size: 0.95rem;
+    color: #555;
+    background-color: #f4f6f7;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 4px solid #888;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <img src="images/header_bg.png" alt="臺北醫學大學體育事務處" class="header-banner">
+    
+    <div class="subtitle">🔥 點選跑道，光速為您解答！</div>
+  </div>
+</header>
+
+<div class="stadium-container" id="stadium">
+
+  <div id="runner">
+    <img src="images/runner.png" alt="Running Man">
+  </div>
+
+  <div class="main-track">
+    <div class="track-btn" onclick="runAndOpenCategory(this, 'category-venue')">
+      <span class="lane-num">1</span>
+      體育館場館問題
+    </div>
+
+    <div id="category-venue" class="sub-menu-panel">
+        
+      <div class="sub-question" onclick="toggleAnswer(this)">健身房開放時間?</div>
+      <div class="sub-answer">
+        <p><strong>🏫信義校區健身中心</strong><br>
+        <strong>【學期間】</strong><br>
+        週一至週五 15:15 – 21:00<br>
+        週末 09:15-12:00、14:15-17:00<br><br>
+        <strong>【寒、暑假】</strong><br>
+        週一至週五 18:15 – 21:00<br>
+        週末 09:15-12:00、14:15-17:00</p>
+        
+        <hr style="border: 1px dashed #ddd;">
+
+        <p><strong>🏫雙和校區健身中心</strong><br>
+        <strong>【學期間】</strong><br>
+        週一至週五 11:00 – 15:00、16:00 – 20:00<br><br>
+        <strong>【寒、暑假】</strong><br>
+        週一至週五 11:00 – 15:00、16:00 – 19:00<br>
+        (暑期週三休館)</p>
+        
+        <div class="gentle-tip">
+          💡 <strong>貼心小提醒：</strong><br>
+          如遇國定假日或特殊活動，開放時間可能會配合彈性調整。<br>
+          為避免您白跑一趟，建議出發前確認當月的行事曆公告喔！<br><br>
+          <strong>行事曆連結 (進入網頁往下滑即可查看)：</strong><br>
+          <a href="https://reurl.cc/1kKdjD" target="_blank">https://reurl.cc/1kKdjD</a>
+        </div>
+      </div>
+
+      <div class="sub-question" onclick="toggleAnswer(this)">健身房收費標準?</div>
+      <div class="sub-answer">
+        <p>
+          <span class="notice-text">
+            ⚠️ 自 114/12/1 起，入場使用「悠遊卡」扣款，敬請先儲值完畢。
+          </span>
+          <br><br>
+          <strong>收費標準如下：</strong><br>
+          ● 學生：20 元 / 次<br>
+          ● 教職員、校友：30 元 / 次<br>
+          ● 校外人士：70 元 / 次
+        </p>
+      </div>
+
+      <div class="sub-question" onclick="toggleAnswer(this)">泳池開放時間?</div>
+      <div class="sub-answer">
+        <p>
+          <strong>【週二 至 週五】</strong><br>
+          06:00 – 09:00<br>
+          17:30 – 21:00
+        </p>
+        <p>
+          <strong>【週六 至 週日】</strong><br>
+          06:00 – 11:00<br>
+          14:00 – 18:00
+        </p>
+        
+        <div class="gentle-tip">
+          💡 <strong>貼心小提醒：</strong><br>
+          如遇國定假日或特殊活動，開放時間可能會配合彈性調整。<br>
+          為避免您白跑一趟，建議出發前確認當月的行事曆公告喔！<br><br>
+          <strong>行事曆連結 (進入網頁往下滑即可查看)：</strong><br>
+          <a href="https://reurl.cc/NNYk1Q" target="_blank">https://reurl.cc/NNYk1Q</a>
+        </div>
+      </div>
+
+      <div class="sub-question" onclick="toggleAnswer(this)">泳池收費標準?</div>
+      <div class="sub-answer">
+        <p>收費標準敬請參考如下：</p>
+        
+        <p>
+          <strong>本校人員收費標準：</strong><br>
+          <a href="https://reurl.cc/4bLAjV" target="_blank">https://reurl.cc/4bLAjV</a>
+        </p>
+        
+        <p>
+          <strong>外賓收費標準：</strong><br>
+          <a href="https://reurl.cc/NNYk45" target="_blank">https://reurl.cc/NNYk45</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="main-track">
+    <div class="track-btn" onclick="runAndOpenCategory(this, 'category-course')">
+      <span class="lane-num">2</span>
+      課程與報名 (成人/兒童陸上課程)
+    </div>
+
+    <div id="category-course" class="sub-menu-panel">
+        
+      <div class="sub-question" onclick="toggleAnswer(this)">泳池相關課程問題?</div>
+      <div class="sub-answer">
+        <p>目前泳池課程正在整合中， 暫無詳細報名資訊，造成不便敬請見諒。<br>
+        泳池詳細課程資訊請直接致電：(02) 27399118#分機2272，將有專人為您說明。</p>
+      </div>
+
+     <div class="sub-question" onclick="toggleAnswer(this)">TMU SPORT成人健康促進課程如何報名?</div>
+      <div class="sub-answer">
+        <p><strong>📅 課程週期</strong><br>
+        本課程以 <strong>每 2 個月</strong> 為一期。</p>
+
+        <p><strong>📢 開課訊息不漏接</strong><br>
+        最新報名時間，皆會優先於 <strong>官方 LINE</strong> 及 <strong>FB 粉專</strong> 公告，建議您提前追蹤。</p>
+
+        <p><strong>📝 報名方式</strong><br>
+        待報名開放後，請直接至「課程報名系統」進行線上報名。</p>
+
+        <div class="gentle-tip" style="background-color: #e8f4fd; border-left-color: #3498db;">
+          🔗 <strong>線上報名傳送門：</strong><br>
+          <a href="https://reurl.cc/2lK2Vr" target="_blank">https://reurl.cc/2lK2Vr</a>
+        </div>
+      </div>
+     <div class="sub-question" onclick="toggleAnswer(this)">TMU KID x FUN兒童營隊如何報名?</div>
+      <div class="sub-answer">
+        <p><strong>🌟 TMU KID x FUN</strong><br>
+        陪您的孩子充實寒暑假！我們致力於打造寓教於樂的營隊體驗。</p>
+
+        <p><strong>📅 資訊公布時間</strong><br>
+        夏令營與冬令營資訊，通常於活動前 <strong>2~3 個月</strong> 優先公布於 <strong>LINE 官方</strong> 及 <strong>FB 粉專</strong>，名額有限，建議提早關注！</p>
+
+        <div class="gentle-tip" style="background-color: #fffbf0; border-left-color: #f39c12;">
+          🔗 <strong>營隊報名傳送門：</strong><br>
+          <a href="https://reurl.cc/nlm9b6" target="_blank">https://reurl.cc/nlm9b6</a>
+        </div>
+      </div>
+        
+      <div class="sub-question" onclick="toggleAnswer(this)">我可以包班嗎?</div>
+      <div class="sub-answer">
+        <p><strong>🤝 專屬包班動起來</strong><br>
+        目前開放 <strong>TMU SPORT 成人健康促進課程</strong> 包班申請。</p>
+
+        <p><strong>👥 歡迎對象</strong><br>
+        北醫體系教職員或醫院員工、公司企業團體、社區里民揪團。</p>
+
+        <div class="gentle-tip">
+          <strong>📞 詳情洽詢：</strong><br>
+          相關細節歡迎直接洽詢 LINE 官方帳號，或直接致電：<br>
+          <strong style="font-size: 1.1rem; color: #2c3e50;">(02) 2739-9118 分機 2274</strong>
+        </div>
+      </div>
+
+      <div class="sub-question" onclick="toggleAnswer(this)">哪裡可以獲得課程資訊?</div>
+      <div class="sub-answer">
+        <p><strong>📱 鎖定最新消息</strong><br>
+        歡迎追蹤以下平台，隨時掌握開課與活動第一手資訊！</p>
+
+        <p>
+          <strong>✅ LINE 官方帳號</strong><br>
+          請搜尋 ID：<span style="color: #00B900; font-weight: bold; font-family: monospace; font-size: 1.1rem;">@496xevbr</span>
+        </p>
+
+        <p>
+          <strong>✅ FB 粉絲專頁</strong><br>
+          🚀 新活動專屬粉專即將上架，敬請期待！
+        </p>
+
+        <div class="gentle-tip">
+          <strong>❓ 如有任何疑問</strong><br>
+          歡迎直接私訊 LINE 官方帳號，或致電：<br>
+          <strong style="font-size: 1.1rem; color: #2c3e50;">(02) 2739-9118 分機 2274</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // 1. 跑者定位與分類展開
+  function runAndOpenCategory(btn, categoryId) {
+    const runner = document.getElementById('runner');
+    const container = document.getElementById('stadium');
+    const targetPanel = document.getElementById(categoryId);
+
+    // --- 關鍵計算 ---
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const relativeTop = btnRect.top - containerRect.top;
+    
+    // 計算垂直置中
+    const centerOffset = (btnRect.height / 2) - (runner.offsetHeight / 2);
+    const finalTop = relativeTop + centerOffset;
+
+    // 重置動畫與位置
+    runner.style.transition = 'none';
+    runner.style.top = finalTop + 'px';
+    runner.style.left = '10px';
+    runner.style.opacity = '1';
+
+    // 強制瀏覽器重繪 (Reflow) 讓上面的 CSS 生效
+    void runner.offsetWidth; 
+
+    // 開始跑步動畫
+    runner.style.transition = 'left 0.8s ease-in-out, opacity 0.5s ease 0.6s';
+    runner.style.left = '85%';
+    runner.style.opacity = '0.3';
+
+    // 收合其他選單
+    document.querySelectorAll('.sub-menu-panel').forEach(panel => {
+      if(panel.id !== categoryId) panel.style.maxHeight = null;
+    });
+
+    // 展開目標選單
+    setTimeout(() => {
+      if (targetPanel.style.maxHeight) {
+        targetPanel.style.maxHeight = null;
+      } else {
+        targetPanel.style.maxHeight = targetPanel.scrollHeight + "px";
+      }
+    }, 400);
+  }
+
+  // 2. 細項展開
+  function toggleAnswer(questionBtn) {
+    const answerDiv = questionBtn.nextElementSibling;
+    questionBtn.classList.toggle('active');
+
+    if (answerDiv.style.maxHeight) {
+      answerDiv.style.maxHeight = null;
+    } else {
+      answerDiv.style.maxHeight = answerDiv.scrollHeight + "px";
+      
+      const parentPanel = questionBtn.closest('.sub-menu-panel');
+      if(parentPanel) {
+         parentPanel.style.maxHeight = "none"; 
+      }
+    }
+  }
+
+  // 3. 網址參數功能
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryKey = urlParams.get('cat'); 
+
+    if (categoryKey) {
+      let targetId = '';
+      if (categoryKey === 'venue') targetId = 'category-venue';
+      if (categoryKey === 'course') targetId = 'category-course';
+
+      if (targetId) {
+        const targetPanel = document.getElementById(targetId);
+        const btn = targetPanel.parentElement.querySelector('.track-btn');
+        if (btn) {
+          setTimeout(() => {
+            runAndOpenCategory(btn, targetId);
+          }, 500);
+        }
+      }
+    }
+  };
+</script>
+
+</body>
+</html>
