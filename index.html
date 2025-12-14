@@ -7,18 +7,22 @@
 <style>
   /* --- 基礎設定 --- */
   :root {
-    --primary-color: #800020;  /* 單位代表色：酒紅 */
-    --header-bg: #EEF4ED;      /* Logo 氛圍色：薄荷綠 */
-    --light-primary: #e6ccd2; 
-    --bg-color: #ffffff;       /* 改為純白，讓紅綠對比更乾淨 */
+    /* 1. 修改：統一背景色為 #EEF4ED */
+    --bg-color: #EEF4ED;
+    
+    /* 4. 修改：調整酒紅色，改亮一點，不要那麼黑 */
+    --primary-color: #9E2A44; 
+    --primary-light: #c45d73; /* 淺酒紅，給示範區塊用 */
+    
     --text-color: #333;
+    --light-bg-accent: #ffffff; /* 內容區塊保持白色，與底色區隔 */
   }
 
   body {
     background-color: var(--bg-color);
     font-family: system-ui, -apple-system, "Microsoft JhengHei", "Heiti TC", sans-serif;
     margin: 0;
-    padding: 0; /* 移除 Body padding，讓 Header 可以滿版 */
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,56 +30,61 @@
     color: var(--text-color);
   }
 
-  /* --- 1. Header 全寬背景設定 --- */
+  /* --- 2. 修改：Header 滿版設定 --- */
   header {
-    background-color: var(--header-bg); /* 設定您的薄荷綠 */
+    background-color: var(--bg-color);
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 20px 40px 20px; /* 增加內部留白 */
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    
-    /* 底部加一點弧度或裝飾，讓紅綠交接更柔和 (選用) */
-    border-bottom: 1px solid #dcece5;
-    box-shadow: 0 4px 10px rgba(105, 155, 126, 0.1); 
+    /* 移除 padding，讓圖片可以貼邊 */
+    padding: 0 0 20px 0; 
+    margin-bottom: 10px;
   }
 
-  /* Header 圖片容器限制 */
+  /* 移除原本的寬度限制，改為 100% */
   .header-content {
-    width: 100%;
-    max-width: 600px;
+    width: 100%; 
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* Header 圖片樣式 */
+  /* 圖片滿版設定 */
   .header-banner {
     width: 100%;
     height: auto;
     display: block;
+    object-fit: cover; /* 確保圖片填滿 */
     
-    /* --- 關鍵魔法：讓圖片融入背景 --- */
-    /* 這行會讓圖片中的白色變透明，透出背後的薄荷綠，解決白底圖片這突兀的問題 */
-    mix-blend-mode: multiply; 
-    
-    /* 如果您的圖片本身就是透明背景PNG，可以移除上面那行，改用下面這行增加質感 */
-    /* filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); */
+    /* 因為底色已經一樣了，移除混合模式讓顏色更鮮豔 */
+    /* mix-blend-mode: multiply; */ 
   }
 
-  /* --- 副標題 --- */
+  /* --- 3. 修改：示範區塊 (光速解答) --- */
+  .subtitle-container {
+    margin-top: -5px; /* 稍微往上拉，接續圖片 */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
+
   .subtitle {
-    margin-top: 15px;
-    /* 改用深青色，連結綠色 Header 與下方內容，比純灰更協調 */
-    color: #2F4F4F; 
-    font-size: 1.1rem;
+    /* 改成淺酒紅色，作為下方跑道的「示範」 */
+    background-color: var(--primary-light); 
+    color: white;
+    font-size: 1rem;
     font-weight: bold;
-    display: inline-block;
+    padding: 8px 25px;
+    border-radius: 50px; /* 圓潤造型 */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(158, 42, 68, 0.2);
     animation: bounce 2s infinite;
-    
-    background-color: rgba(255,255,255,0.6); /* 淡淡的白底增加文字可讀性 */
-    padding: 5px 15px;
-    border-radius: 20px;
   }
 
   @keyframes bounce {
@@ -89,11 +98,11 @@
     position: relative;
     width: 100%;
     max-width: 600px;
-    padding: 0 20px 120px 20px; /* 左右補回 padding */
+    padding: 0 20px 120px 20px;
     box-sizing: border-box;
   }
 
-  /* --- 2. 跑者圖片化設定 --- */
+  /* --- 跑者圖片化設定 --- */
   #runner {
     position: absolute;
     top: 0;
@@ -116,36 +125,45 @@
 
   /* --- 第一層：主要跑道區塊 --- */
   .main-track {
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    background-color: white;
+    margin-bottom: 20px;
+    border-radius: 15px; /* 更圓潤一點 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-color: var(--light-bg-accent);
     overflow: hidden;
-    border: 1px solid #eee; /* 增加微微邊框 */
+    /* 移除邊框，用陰影呈現立體感即可 */
+    border: none; 
   }
 
-  /* 跑道按鈕 - 維持酒紅色 */
+  /* 4. 修改：跑道按鈕優化 */
   .track-btn {
     position: relative;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* 使用調亮後的酒紅 */
     color: white;
-    padding: 25px 20px 25px 60px;
+    padding: 30px 20px 30px 70px; /* 加高一點，更有跑道感 */
     cursor: pointer;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     font-weight: bold;
     user-select: none;
-    /* 微調漸層，增加一點質感 */
+    letter-spacing: 1px;
+    
+    /* --- 關鍵修改：讓跑道線更明顯 --- */
     background-image: repeating-linear-gradient(
       90deg,
       transparent,
-      transparent 19px,
-      rgba(255,255,255,0.1) 20px
+      transparent 58px,     /* 間距拉寬 */
+      rgba(255,255,255,0.25) 60px /* 線條變亮、變明顯 */
     );
-    transition: transform 0.1s;
+    border-bottom: 4px solid rgba(0,0,0,0.1); /* 增加底部厚度感 */
+    transition: transform 0.1s, filter 0.2s;
   }
   
+  .track-btn:hover {
+    filter: brightness(1.1); /* 滑鼠移過去變亮 */
+  }
+
   .track-btn:active {
     transform: scale(0.98);
+    border-bottom: 2px solid rgba(0,0,0,0.1); /* 按下去時壓扁效果 */
   }
 
   .lane-num {
@@ -153,24 +171,25 @@
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 2rem;
-    opacity: 0.4;
+    font-size: 2.5rem; /* 數字變大 */
+    opacity: 0.8;      /* 數字變清楚 */
     font-style: italic;
     font-family: 'Arial Black', sans-serif;
     pointer-events: none;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
   }
 
   /* --- 第二層：細項選單區 --- */
   .sub-menu-panel {
-    background-color: white;
+    background-color: var(--light-bg-accent);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-out;
   }
 
   .sub-question {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
+    padding: 18px 25px;
+    border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
     color: #444;
     font-weight: bold;
@@ -178,25 +197,28 @@
     justify-content: space-between;
     align-items: center;
     transition: background 0.2s;
+    font-size: 1.05rem;
   }
 
   .sub-question:hover {
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
     color: var(--primary-color);
   }
 
   .sub-question::after {
     content: '+';
-    font-size: 1.2rem;
-    color: #999;
+    font-size: 1.4rem;
+    color: #ccc;
+    font-weight: lighter;
   }
 
   .sub-question.active {
-    background-color: #fff5f6; /* 淡粉色背景呼應酒紅 */
+    background-color: #fff0f3; 
     color: var(--primary-color);
   }
   .sub-question.active::after {
     content: '-';
+    color: var(--primary-color);
   }
 
   .sub-answer {
@@ -204,14 +226,14 @@
     overflow: hidden;
     background-color: #fafafa;
     color: #555;
-    padding: 0 20px;
+    padding: 0 25px;
     transition: max-height 0.3s ease;
-    border-left: 4px solid var(--light-primary);
+    border-left: 5px solid #d4a5b0; /* 淺粉色裝飾線 */
   }
 
   .sub-answer p {
     margin: 15px 0;
-    line-height: 1.6;
+    line-height: 1.7;
   }
     
   .sub-answer strong {
@@ -219,7 +241,7 @@
   }
 
   .sub-answer a {
-    color: #2980b9;
+    color: #0077cc; /* 超連結改亮藍色 */
     font-weight: bold;
     text-decoration: none;
     word-break: break-all;
@@ -240,12 +262,13 @@
     
   .gentle-tip {
     font-size: 0.95rem;
-    color: #555;
-    background-color: #f4f6f7;
-    padding: 12px;
-    border-radius: 6px;
-    margin-top: 10px;
-    border-left: 4px solid #888;
+    color: #666;
+    background-color: #f2f7f9; /* 稍微偏藍的灰色，比較清爽 */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-left: 4px solid #8baebf;
   }
 </style>
 </head>
@@ -255,7 +278,11 @@
   <div class="header-content">
     <img src="images/header_bg.png" alt="臺北醫學大學體育事務處" class="header-banner">
     
-    <div class="subtitle">🔥 點選跑道，光速為您解答！</div>
+    <div class="subtitle-container">
+      <div class="subtitle">
+        <span>🔥 點選跑道，光速為您解答！</span>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -340,18 +367,15 @@
       <div class="sub-question" onclick="toggleAnswer(this)">泳池收費標準?</div>
       <div class="sub-answer">
         <p>收費標準敬請參考如下：</p>
-        
         <p>
           <strong>本校人員收費標準：</strong><br>
           <a href="https://reurl.cc/4bLAjV" target="_blank">https://reurl.cc/4bLAjV</a>
         </p>
-        
         <p>
           <strong>外賓收費標準：</strong><br>
           <a href="https://reurl.cc/NNYk45" target="_blank">https://reurl.cc/NNYk45</a>
         </p>
       </div>
-
     </div>
   </div>
 
@@ -363,7 +387,6 @@
     </div>
 
     <div id="category-course" class="sub-menu-panel">
-        
       <div class="sub-question" onclick="toggleAnswer(this)">泳池相關課程問題?</div>
       <div class="sub-answer">
         <p>目前泳池課程正在整合中， 暫無詳細報名資訊，造成不便敬請見諒。<br>
@@ -386,6 +409,7 @@
           <a href="https://reurl.cc/2lK2Vr" target="_blank">https://reurl.cc/2lK2Vr</a>
         </div>
       </div>
+
      <div class="sub-question" onclick="toggleAnswer(this)">TMU KID x FUN兒童營隊如何報名?</div>
       <div class="sub-answer">
         <p><strong>🌟 TMU KID x FUN</strong><br>
@@ -436,48 +460,40 @@
           <strong style="font-size: 1.1rem; color: #2c3e50;">(02) 2739-9118 分機 2274</strong>
         </div>
       </div>
-
     </div>
   </div>
 
 </div>
 
 <script>
-  // 1. 跑者定位與分類展開
+  // 1. 跑者定位與分類展開 (保持不變)
   function runAndOpenCategory(btn, categoryId) {
     const runner = document.getElementById('runner');
     const container = document.getElementById('stadium');
     const targetPanel = document.getElementById(categoryId);
 
-    // --- 關鍵計算 ---
     const containerRect = container.getBoundingClientRect();
     const btnRect = btn.getBoundingClientRect();
     const relativeTop = btnRect.top - containerRect.top;
     
-    // 計算垂直置中
     const centerOffset = (btnRect.height / 2) - (runner.offsetHeight / 2);
     const finalTop = relativeTop + centerOffset;
 
-    // 重置動畫與位置
     runner.style.transition = 'none';
     runner.style.top = finalTop + 'px';
     runner.style.left = '10px';
     runner.style.opacity = '1';
 
-    // 強制瀏覽器重繪 (Reflow) 讓上面的 CSS 生效
     void runner.offsetWidth; 
 
-    // 開始跑步動畫
     runner.style.transition = 'left 0.8s ease-in-out, opacity 0.5s ease 0.6s';
     runner.style.left = '85%';
     runner.style.opacity = '0.3';
 
-    // 收合其他選單
     document.querySelectorAll('.sub-menu-panel').forEach(panel => {
       if(panel.id !== categoryId) panel.style.maxHeight = null;
     });
 
-    // 展開目標選單
     setTimeout(() => {
       if (targetPanel.style.maxHeight) {
         targetPanel.style.maxHeight = null;
@@ -487,7 +503,7 @@
     }, 400);
   }
 
-  // 2. 細項展開
+  // 2. 細項展開 (保持不變)
   function toggleAnswer(questionBtn) {
     const answerDiv = questionBtn.nextElementSibling;
     questionBtn.classList.toggle('active');
@@ -504,7 +520,7 @@
     }
   }
 
-  // 3. 網址參數功能
+  // 3. 網址參數功能 (保持不變)
   window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const categoryKey = urlParams.get('cat'); 
